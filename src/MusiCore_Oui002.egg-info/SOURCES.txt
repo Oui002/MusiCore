@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+setup.cfg
+src/MusiCore/Player.py
+src/MusiCore/Stream.py
+src/MusiCore/__init__.py
+src/MusiCore_Oui002.egg-info/PKG-INFO
+src/MusiCore_Oui002.egg-info/SOURCES.txt
+src/MusiCore_Oui002.egg-info/dependency_links.txt
+src/MusiCore_Oui002.egg-info/top_level.txt
