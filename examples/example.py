@@ -22,9 +22,9 @@ async def on_press(key):
         player.offset_pos(-5)
     
     elif key == pynput.keyboard.Key.f3:
-        player.set_volume(player.volume + 10)
+        player.set_volume(player.volume + player.max_vol_boost / 10)
     elif key == pynput.keyboard.Key.f2:
-        player.set_volume(player.volume - 10)
+        player.set_volume(player.volume - player.max_vol_boost / 10)
 
 def run_on_press(key):
     run(on_press(key))

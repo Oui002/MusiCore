@@ -1,4 +1,4 @@
-from MusiCore.Stream import FromWave
+from MusiCore.Stream.Stream import FromWave
 
 from sounddevice import OutputStream, CallbackAbort, CallbackStop, sleep
 from queue import Queue
