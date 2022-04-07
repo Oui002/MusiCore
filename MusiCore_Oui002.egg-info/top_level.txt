@@ -1,0 +1,4 @@
+MusiCore
+MusiCore/Player
+MusiCore/Playlist
+MusiCore/Stream

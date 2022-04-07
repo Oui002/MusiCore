@@ -20,17 +20,19 @@ async def on_press(key):
         player.offset_pos(5)
     elif key == pynput.keyboard.Key.f6:
         player.offset_pos(-5)
-    
+
     elif key == pynput.keyboard.Key.f3:
-        player.set_volume(player.volume + player.max_vol_boost / 10)
+        print("Hi")
+        player.increase_volume(by=player.max_vol_boost / 10)
     elif key == pynput.keyboard.Key.f2:
-        player.set_volume(player.volume - player.max_vol_boost / 10)
+        print("Hi")
+        player.increase_volume(by=-player.max_vol_boost / 10)
 
 def run_on_press(key):
     run(on_press(key))
 
 if __name__ == '__main__':
-    player = MusiCore.StreamPlayer(MusiCore.Stream.FromWave(wave.open('../music/3.wav', 'rb')), chunk_size=chunk_size, queue_size=queue_size)
+    player = MusiCore.StreamPlayer(MusiCore.Stream.FromWave(wave.open('../music/4.wav', 'rb')), chunk_size=chunk_size, queue_size=queue_size)
     player.play(blocking=False)
 
     with pynput.keyboard.Listener(
