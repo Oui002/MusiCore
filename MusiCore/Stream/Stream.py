@@ -13,16 +13,23 @@ class FromWave():
         self.wro_duration = int(self.params.nframes / self.params.framerate)
     
     def read_buffer(self, buffersize: int) -> bytes:
-        return self.wro.readframes(int(buffersize))
+        audio = self.wro.readframes(int(buffersize * self.params.nchannels))
+        return audio
     
     def buffer_as_np_int16(self, buffersize: int):
-        return numpy.repeat(numpy.frombuffer(self.read_buffer(buffersize), dtype=numpy.int16).reshape(int(buffersize), self.params.nchannels), 1, axis=1)
+        buffer = self.read_buffer(buffersize)
+        audio = numpy.repeat(numpy.frombuffer(buffer, dtype=numpy.int16).reshape(int(len(buffer) / 2 / self.params.nchannels), self.params.nchannels), 1, axis=1)
+
+        return audio
 
     def rewind(self) -> None:
         return self.wro.rewind()
 
-    def setpos(self, position: int) -> None:
-        return self.wro.setpos(position)
+    def setpos(self, position: int) -> str:
+        try:
+            return self.wro.setpos(position)
+        except wave.Error:
+            return 'EOF'
 
     def tell_pos(self) -> int:
         return self.wro.tell()

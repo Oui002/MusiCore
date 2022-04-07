@@ -1,4 +1,6 @@
-from MusiCore.Stream import FromWave
+import sys
+from numpy import clip
+from MusiCore.Stream.Stream import FromWave
 
 from sounddevice import OutputStream, CallbackAbort, CallbackStop, sleep
 from queue import Queue
@@ -16,13 +18,13 @@ class StreamPlayer():
 
         self.paused = False
         self.queue_size = queue_size
-        self.chunk_size = chunk_size / (self.wave_stream.params.sampwidth + self.wave_stream.params.nchannels)
+        self.chunk_size = chunk_size # / (self.wave_stream.params.sampwidth + self.wave_stream.params.nchannels)
 
         self.cc = False
 
         self.output_stream = OutputStream(
             samplerate=self.wave_stream.params.framerate,
-            blocksize=int(self.chunk_size),
+            blocksize=int(self.chunk_size * self.wave_stream.params.nchannels),
             channels=self.wave_stream.params.nchannels,
             dtype="int16",
             callback=self.callback,
@@ -40,7 +42,6 @@ class StreamPlayer():
         elif volume < 0:
             volume = 0
 
-        print(volume)
         self.volume = volume
         
     def play(self, blocking: bool = False):
@@ -67,7 +68,8 @@ class StreamPlayer():
         if pos_in_frames <= 0:
             pos_in_frames = 0
 
-        self.wave_stream.setpos(pos_in_frames)
+        if self.wave_stream.setpos(pos_in_frames) == "EOF":
+            self.finished_callback()
 
         self.queue = Queue(maxsize=self.queue_size)
         self.init_queue()
@@ -90,7 +92,7 @@ class StreamPlayer():
         assert not status
 
         try:
-            out = self.queue.get_nowait() / 100 * self.volume
+            out = clip((self.queue.get_nowait() / 100 * self.volume), -25000, 25000)
         except:
             return
         
@@ -104,7 +106,7 @@ class StreamPlayer():
     
     def finished_callback(self):
         if not self.paused:
-            self.wave_stream.release()
+            self.quit()
 
     def run_cc(self, duration: float = 0.05):
         self.cc = True
@@ -112,5 +114,7 @@ class StreamPlayer():
         self.cc = False
 
     def quit(self):
-        self.output_stream.close()
+        self.queue = Queue()
+        self.output_stream.abort()
         self.wave_stream.release()
+        quit()
