@@ -1,5 +1,7 @@
 from numpy import clip
+
 from MusiCore.Stream.Stream import FromWave
+from MusiCore.Playlist._Playlist import Playlist
 from MusiCore.Player import Sound
 
 from sounddevice import OutputStream, CallbackAbort, CallbackStop, sleep
@@ -10,10 +12,10 @@ import time
 
 class SoundPlayer():
     
-    def __init__(self, sound: Sound, chunk_size: int, queue_size: int, max_vol_boost: int = 100):
+    def __init__(self, sound: Sound, volume: int = 100, chunk_size: int = 8192, queue_size: int = 20, max_vol_boost: int = 100, callback: callable = None):
         self.wave_stream = sound.stream
 
-        self.volume = 100
+        self.volume = volume
         self.max_vol_boost = max_vol_boost
 
         self.paused = False
@@ -33,6 +35,9 @@ class SoundPlayer():
 
         self.queue = Queue(self.queue_size)
         self.init_queue()
+
+        if callback != None: self.fcb: callable = callback
+        else: self.fcb = None
 
     def increase_volume(self, by: int):
         volume = self.volume + by
@@ -106,6 +111,8 @@ class SoundPlayer():
     
     def finished_callback(self):
         if not self.paused:
+            if self.fcb:
+                self.fcb()
             self.quit()
 
     def run_cc(self, duration: float = 0.05):
@@ -117,3 +124,4 @@ class SoundPlayer():
         self.queue = Queue()
         self.output_stream.abort()
         self.wave_stream.release()
+        del self
