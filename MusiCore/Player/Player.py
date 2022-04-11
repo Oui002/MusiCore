@@ -1,4 +1,3 @@
-import sys
 from numpy import clip
 from MusiCore.Stream.Stream import FromWave
 

@@ -28,7 +28,7 @@ def run_on_press(key):
     run(on_press(key))
 
 if __name__ == '__main__':
-    player = MusiCore.StreamPlayer(MusiCore.Stream.FromWave(wave.open('../music/3.wav', 'rb')), chunk_size=chunk_size, queue_size=queue_size, max_vol_boost=100)
+    player = MusiCore.StreamPlayer(MusiCore.Stream.FromWave(wave.open('../music/Pastel Rain - Sangatsu no Phantasia.wav', 'rb')), chunk_size=chunk_size, queue_size=queue_size, max_vol_boost=100)
     player.play(blocking=False) 
 
     with pynput.keyboard.Listener(

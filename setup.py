@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="MusiCore-Oui002",
-    version="0.0.6.3.8",
+    version="0.0.6.3.9",
     author="https://github.com/Oui002",
     description="Module for playing wave files in buffers. Also has a basic music player functions like playlists and stuff like that :)) ",
     long_description=long_description,
