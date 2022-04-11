@@ -1,5 +1,6 @@
 from numpy import clip
 from MusiCore.Stream.Stream import FromWave
+from MusiCore.Player import Sound
 
 from sounddevice import OutputStream, CallbackAbort, CallbackStop, sleep
 from queue import Queue
@@ -7,10 +8,10 @@ from queue import Queue
 import threading
 import time
 
-class StreamPlayer():
+class SoundPlayer():
     
-    def __init__(self, stream: FromWave, chunk_size: int, queue_size: int, max_vol_boost: int = 100):
-        self.wave_stream = stream
+    def __init__(self, sound: Sound, chunk_size: int, queue_size: int, max_vol_boost: int = 100):
+        self.wave_stream = sound.stream
 
         self.volume = 100
         self.max_vol_boost = max_vol_boost
@@ -116,4 +117,3 @@ class StreamPlayer():
         self.queue = Queue()
         self.output_stream.abort()
         self.wave_stream.release()
-        quit()

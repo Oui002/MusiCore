@@ -1,6 +1,5 @@
 import MusiCore
 
-import wave
 import pynput
 from asyncio import run
 
@@ -28,7 +27,11 @@ def run_on_press(key):
     run(on_press(key))
 
 if __name__ == '__main__':
-    player = MusiCore.StreamPlayer(MusiCore.Stream.FromWave(wave.open('../music/Pastel Rain - Sangatsu no Phantasia.wav', 'rb')), chunk_size=chunk_size, queue_size=queue_size, max_vol_boost=100)
+    sound = MusiCore.Sound(name="Pastel Rain - Sangatsu no Phantasia", 
+    path='../music/Pastel Rain - Sangatsu no Phantasia.wav', 
+    stream=MusiCore.Stream.FromWave('../music/Pastel Rain - Sangatsu no Phantasia.wav'))
+    
+    player = MusiCore.SoundPlayer(sound, chunk_size=chunk_size, queue_size=queue_size, max_vol_boost=100)
     player.play(blocking=False) 
 
     with pynput.keyboard.Listener(
